@@ -60,3 +60,62 @@ let  coinNumbers = document.getElementById("coin-numbers") ;
         
     })
  }
+ document.getElementById('clear-button').addEventListener('click',function(e){
+    let getlist = document.getElementById('ul-list')
+    getlist.innerHTML =""
+    
+   
+
+
+ })
+
+const copyButtons = document.querySelectorAll('.copy-btn');
+
+for (const btn of copyButtons) {
+  btn.addEventListener('click', async function () {
+
+    const card = btn.closest('.card');
+    if (!card) return;
+
+    const nameEl = card.querySelector('.service-name');
+    const numberEl = card.querySelector('.service-number');
+    const name = nameEl ? nameEl.innerText.trim() : '';
+    const number = numberEl ? numberEl.innerText.trim() : '';
+
+    const textToCopy = `${name} - ${number}`;
+
+   
+    const showCopied = (button) => {
+      const originalHTML = button.innerHTML;
+      button.innerHTML = '✅ Copied';
+      button.disabled = true;
+      setTimeout(() => {
+        button.innerHTML = originalHTML;
+        button.disabled = false;
+      }, 1200);
+    };
+
+  
+    try {
+      await navigator.clipboard.writeText(textToCopy);
+      showCopied(btn);
+    } catch (err) {
+     
+      const ta = document.createElement('textarea');
+      ta.value = textToCopy;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'absolute';
+      ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand('copy');
+        showCopied(btn);
+      } catch (e) {
+   
+        alert('Could not automatically copy. Select the text and press Ctrl/Cmd + C:\n\n' + textToCopy);
+      }
+      document.body.removeChild(ta);
+    }
+  });
+}
